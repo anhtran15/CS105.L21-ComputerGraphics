@@ -17,9 +17,10 @@
 
 			let container;
 			let camera, scene, renderer;
-			let loader, islandModel, sharkModel, treeModel;
+			let loader, islandModel, sharkModel, sealModel, treeModel;
 			let controls, water, sun, sphereMesh, coneMesh;
 			var angle = 0;
+			var angle2 = 0;
 
 			init();
 			animate();
@@ -123,9 +124,21 @@
 					'./models/shark/scene.gltf',
 					(gltf) => {
 						sharkModel = gltf.scene;
-						sharkModel.position.set(-20, -25, -70);
+						sharkModel.position.set(80, -25, 80);
 						sharkModel.scale.set(0.2, 0.2, 0.2);
 						scene.add(sharkModel);
+					}
+				);
+
+				// Seal model
+				loader.load(
+					'./models/seal/scene.gltf',
+					(gltf) => {
+						sealModel = gltf.scene;
+						sealModel.position.set(0, 18, -10);
+						sealModel.rotation.y = 90;
+						sealModel.scale.set(0.05, 0.05, 0.05);
+						scene.add(sealModel);
 					}
 				);
 
@@ -161,8 +174,11 @@
 				requestAnimationFrame(animate);
 				// Move shark around island
 				angle += 0.02;
-				sharkModel.position.x = 50 * Math.cos(angle) + 0;
-				sharkModel.position.z = 50 * Math.sin(angle) + 0;
+				angle2 += 0.01;
+				sharkModel.position.x = 80 * Math.cos(-angle) + 0;
+				sharkModel.position.z = 80 * Math.sin(-angle) + 0;
+				sharkModel.rotation.y = angle2;
+				if (angle2 === 0.1) {angle2 = 0};
 				render();
 			}
 
