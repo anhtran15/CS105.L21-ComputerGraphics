@@ -13,9 +13,11 @@
 			import { OrbitControls } from './jsm/controls/OrbitControls.js';
 			import { Water } from './jsm/objects/Water.js';
 			import { Sky } from './jsm/objects/Sky.js';
+			import {GLTFLoader} from './jsm/loaders/GLTFLoader.js';
 
-			let container, stats;
+			let container;
 			let camera, scene, renderer;
+			let loader, islandModel, sharkModel, treeModel;
 			let controls, water, sun, sphereMesh, coneMesh;
 			var angle = 0;
 
@@ -104,23 +106,42 @@
 
 				updateSun();
 
-				//
+				// Island model
+				loader = new GLTFLoader();
+				loader.load(
+					'./models/island/scene.gltf',
+					(gltf) => {
+						islandModel = gltf.scene;
+						islandModel.position.y = 20;
+						islandModel.scale.set(20, 20, 20);
+						scene.add(islandModel);
+					}
+				);
 
-				const sphereGometry = new THREE.SphereGeometry(30, 80, 32);
-				const sphereMaterial = new THREE.MeshStandardMaterial({ roughness: 0, color: '#0e4210'});
-				sphereMesh = new THREE.Mesh(sphereGometry, sphereMaterial);
-				sphereMesh.position.y = -5;
-				scene.add(sphereMesh);
+				// Shark model
+				loader.load(
+					'./models/shark/scene.gltf',
+					(gltf) => {
+						sharkModel = gltf.scene;
+						sharkModel.position.set(-20, -25, -70);
+						sharkModel.scale.set(0.2, 0.2, 0.2);
+						scene.add(sharkModel);
+					}
+				);
 
-				const coneGeometry = new THREE.ConeGeometry(10, 20, 32);
-				const coneMaterial = new THREE.MeshStandardMaterial({color: '#ad4747'});
-				coneMesh = new THREE.Mesh(coneGeometry, coneMaterial);
-				coneMesh.position.x = -50;
-				coneMesh.position.z = -50;
-				scene.add(coneMesh);
+				// Tree model
+				loader.load(
+					'./models/coconut_tree/scene.gltf',
+					(gltf) => {
+						treeModel = gltf.scene;
+						treeModel.position.set(0, 15, 15);
+						treeModel.scale.set(10, 10, 10);
+						scene.add(treeModel);
+					}
+				);
+			
 
-				//
-
+				// Controls
 				controls = new OrbitControls( camera, renderer.domElement );
 				controls.maxPolarAngle = Math.PI * 0.495;
 				controls.target.set( 0, 10, 0 );
@@ -138,10 +159,10 @@
 
 			function animate() {
 				requestAnimationFrame(animate);
-				// Move coneMesh in a circle
+				// Move shark around island
 				angle += 0.02;
-				coneMesh.position.x = 50 * Math.cos(angle) + 0;
-				coneMesh.position.z = 50 * Math.sin(angle) + 0;
+				sharkModel.position.x = 50 * Math.cos(angle) + 0;
+				sharkModel.position.z = 50 * Math.sin(angle) + 0;
 				render();
 			}
 
