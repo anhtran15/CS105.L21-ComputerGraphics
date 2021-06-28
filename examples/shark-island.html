@@ -125,7 +125,11 @@
 					(gltf) => {
 						sharkModel = gltf.scene;
 						sharkModel.position.set(80, -25, 80);
+						// sharkModel.rotation.z = 0.78;
 						sharkModel.scale.set(0.2, 0.2, 0.2);
+						// console.log(sharkModel.rotation)
+						sharkModel.rotation.set(sharkModel.rotation.x, Math.PI/2, sharkModel.rotation.z);
+						console.log(sharkModel.rotation)
 						scene.add(sharkModel);
 					}
 				);
@@ -174,11 +178,10 @@
 				requestAnimationFrame(animate);
 				// Move shark around island
 				angle += 0.02;
-				angle2 += 0.01;
-				sharkModel.position.x = 80 * Math.cos(-angle) + 0;
-				sharkModel.position.z = 80 * Math.sin(-angle) + 0;
-				sharkModel.rotation.y = angle2;
-				if (angle2 === 0.1) {angle2 = 0};
+				angle2 = 0.02;
+				sharkModel.position.x = 80 * Math.cos(angle) + 0;
+				sharkModel.position.z = 80 * Math.sin(angle) + 0;
+				sharkModel.rotation.y -= angle2;
 				render();
 			}
 
